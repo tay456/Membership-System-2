@@ -33,5 +33,10 @@ def save_changes(data):
 
 # need to look at possibly changing this to something else at some point
 def get_a_member(card_no):
-    r = Member.query.filter_by(card_no=card_no).first()
-    return r
+    return Member.query.filter_by(card_no=card_no).first()
+
+#top up
+
+#check balance
+
+# edit balance by paying for something
