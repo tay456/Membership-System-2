@@ -140,4 +140,5 @@ gen
 #files
 app/main/members.db
 migrations*
-app/main/test/p_member_service.py
+app/main/members.db-journal
+app/test/p_member_service.py

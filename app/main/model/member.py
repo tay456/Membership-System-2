@@ -24,4 +24,4 @@ class Member(db.Model):
         return flask_bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return "<User '{}'>".format(self.name)
+        return "<Member '{}'>".format(self.name)

@@ -2,7 +2,6 @@ from app.main import db
 from app.main.model.member import Member
 
 
-
 def add_new_member(data):
     member = Member.query.filter_by(card_no=data['card_no']).first()
     if not member:
@@ -10,7 +9,7 @@ def add_new_member(data):
             name=data['name'],
             card_no=data['card_no'],
             email=data['email'],
-            password_hash=data['password_hash']
+            password=data['password_hash']
         )
         save_changes(new_member)
         response_object = {
@@ -30,8 +29,11 @@ def save_changes(data):
     db.session.add(data)
     db.session.commit()
 
+
+# need to look at possibly changing this to something else at some point
 def get_a_member(card_no):
     return Member.query.filter_by(card_no=card_no).first()
+
 
 def get_balance(card_no):
     response = Member

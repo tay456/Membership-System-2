@@ -1,5 +1,7 @@
 import os
 import unittest
+from app import blueprint
+
 
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -12,6 +14,8 @@ from app.main.model import member
 app = create_app(os.getenv('dev') or 'dev')
 
 app.app_context().push()
+
+app.register_blueprint(blueprint)
 
 manager = Manager(app)
 
