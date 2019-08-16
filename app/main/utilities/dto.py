@@ -8,4 +8,6 @@ class MemberDto:
         'card_no': fields.String(description='user Identifier'),
         'email': fields.String(required=True, description='member email address'),
         'password_hash': fields.String(required=True, description='member password'),
+        'balance': fields.Integer(required=False)
     })
+

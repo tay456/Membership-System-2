@@ -5,12 +5,11 @@ class Member(db.Model):
 
     __tablename__ = "member"
 
-    id = db.Column(db.Integer, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
     card_no = db.Column(db.String(100), unique=True)
     email = db.Column(db.String(255), primary_key=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
-    balance = db.Column(db.Integer, nullable=True)
+    balance = db.Column(db.Integer, default=0)
 
     @property
     def password(self):
