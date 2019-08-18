@@ -35,8 +35,58 @@ def save_changes(data):
 def get_a_member(card_no):
     return Member.query.filter_by(card_no=card_no).first()
 
-#top up
 
-#check balance
+# top up
 
 # edit balance by paying for something
+
+
+def update(card_no, money):
+    update_this = Member.query.filter_by(card_no=card_no).first()
+    update_this.balance += money
+    db.session.commit()
+    value = True
+
+    if value:
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully updated balance.'
+        }
+        return response_object, 200
+
+    else:
+        response_object = {
+            'status': 'fail',
+            'message': 'Member unable to update balance',
+        }
+        return response_object, 409
+
+
+def modify_balance(card_no, purchase):
+    take_away = Member.query.filter_by(card_no=card_no).first()
+    left = take_away.balance - purchase
+    if take_away.balance > 0 and left >= 0:
+        take_away.balance -= purchase
+        db.session.commit()
+        value = True
+    else:
+        response_object ={
+            'status': 'fail',
+            'message': 'Not enough funds in account'
+        }
+        return response_object, 400
+
+    if value:
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully bought goods.'
+        }
+        return response_object, 200
+
+    else:
+        response_object = {
+            'status': 'fail',
+            'message': 'Member unable to make purchase',
+        }
+        return response_object, 409
+
