@@ -1,5 +1,5 @@
 import pytest
-from app.main.service.member_service import *
+from app.main.service.member_service_handler import *
 from app.main import create_app, db
 
 

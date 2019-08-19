@@ -1,5 +1,6 @@
 from app.main import db
 from app.main.model.member import Member
+from app.main.utilities.dto import MemberDetailsDto
 
 
 def add_new_member(data):
@@ -31,26 +32,33 @@ def save_changes(data):
     db.session.commit()
 
 
-# need to look at possibly changing this to something else at some point
-def get_a_member(card_no):
-    return Member.query.filter_by(card_no=card_no).first()
+def get_member_details(card_no):
+    member = Member.query.filter_by(card_no=card_no).first()
+    if not member:
+        response_object = {
+            'status': 'unsuccessful',
+            'message': 'Member does not exist, please register.'
+        }
+        return response_object, 404
+    else:
+        response_object = {
+            'Member': map(MemberDetailsDto, member)
+        }
+        return response_object, 200
 
 
-# top up
 
-# edit balance by paying for something
-
-
-def update(card_no, money):
-    update_this = Member.query.filter_by(card_no=card_no).first()
-    update_this.balance += money
+def update_balance(card_no, paid_in):
+    member_details = Member.query.filter_by(card_no=card_no).first()
+    new_balance = member_details.balance + paid_in
     db.session.commit()
     value = True
 
     if value:
         response_object = {
             'status': 'success',
-            'message': 'Successfully updated balance.'
+            'message': 'Successfully updated balance.',
+            'Balance': str(new_balance)
         }
         return response_object, 200
 
@@ -62,31 +70,22 @@ def update(card_no, money):
         return response_object, 409
 
 
-def modify_balance(card_no, purchase):
-    take_away = Member.query.filter_by(card_no=card_no).first()
-    left = take_away.balance - purchase
-    if take_away.balance > 0 and left >= 0:
-        take_away.balance -= purchase
+def modify_balance(card_no, cost):
+    member_details = Member.query.filter_by(card_no=card_no).first()
+    amount_remaining = member_details.balance - cost
+    if amount_remaining >= 0:
         db.session.commit()
-        value = True
-    else:
-        response_object ={
-            'status': 'fail',
-            'message': 'Not enough funds in account'
-        }
-        return response_object, 400
-
-    if value:
         response_object = {
-            'status': 'success',
-            'message': 'Successfully bought goods.'
+            'Status': 'success',
+            'Message': 'Successfully bought goods.',
+            'New balance': str(amount_remaining)
         }
         return response_object, 200
 
     else:
-        response_object = {
+        response_object ={
             'status': 'fail',
-            'message': 'Member unable to make purchase',
+            'message':'Not enough funds in account',
+            'balance': str(member_details.balance)
         }
-        return response_object, 409
-
+        return response_object, 400

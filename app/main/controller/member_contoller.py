@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Resource
 
 from app.main.utilities.dto import MemberDto, MemberDetailsDto, MemberBalanceDto
-from ..service.member_service import *
+from ..service.member_service_handler import *
 
 api = MemberDto.api
 _member = MemberDto.member
@@ -25,28 +25,21 @@ class MemberList(Resource):
         return add_new_member(data=data)
 
 
-@api.route('/purchase<card_no>/<int:purchase>')
+@api.route('/cardNo:<card_no>/<int:cost>')
 @api.response(201, 'Member balance deducted.')
 class MemberPurchase(Resource):
     @api.doc('purchase goods')
-    def put(self, card_no, purchase):
+    def put(self, card_no, cost):
         """"deducts cost of goods from member balance"""
-        return modify_balance(card_no, purchase)
+        return modify_balance(card_no, cost)
 
 
 @api2.route('/<card_no>/memberDetails')
-@api2.param('card_no', 'The Member identifier')
-@api2.response(404, 'Member not found.')
 class Member(Resource):
-    @api2.doc('get a member')
     @api2.marshal_with(_member2)
     def get(self, card_no):
         """get a member given its identifier"""
-        member = get_a_member(card_no)
-        if not member:
-            api2.abort(404)
-        else:
-            return member
+        return get_member_details(card_no)
 
 
 @api3.route('/topUp/<card_no>/<int:money>')
@@ -55,6 +48,6 @@ class MemberTopUp(Resource):
     @api3.doc('update member balance')
     def put(self, card_no, money):
         """"tops up the money on a member card"""
-        return update(card_no, money)
+        return update_balance(card_no, money)
 
 
