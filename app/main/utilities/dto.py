@@ -26,9 +26,10 @@ class MemberDetailsDto:
 
 class MemberBalanceDto:
     api = Namespace('member', description='user related operations')
-    member = api.model('member_update', {
-        'card_no': fields.String(description='user Identifier'),
-        'money': fields.Integer(required=True)
+    member = api.model('member_top_up_and_purchase', {
+        'employee_id': fields.String(required=True, description='employee unique id'),
+        'pin_number': fields.String(required=True, description='employee passcode'),
+        'money': fields.Integer(required=True),
     })
 
 # add a DTO for mapping revoked tickets to database in both logout requests

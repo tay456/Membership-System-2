@@ -9,8 +9,8 @@ class Member(db.Model):
     name = db.Column(db.String(50), nullable=False)
     card_no = db.Column(db.String(16), unique=True)
     email = db.Column(db.String(255), primary_key=True, unique=True, nullable=False)
-    mobile_number = db.column(db.Integer, unique=True)
-    pin_number = db.Column(db.String(100), nullable=False, unique=True)
+    mobile_number = db.Column(db.Integer, unique=True)
+    pin_number = db.Column(db.String(4), nullable=False, unique=True)
     balance = db.Column(db.Integer, default=0)
 
     @property
